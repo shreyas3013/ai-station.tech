@@ -121,10 +121,13 @@ const Sidebar: React.FC = () => {
 
       <div className="flex-1 overflow-y-auto px-3 scrollbar-thin">
         {sessions.map((s) => (
-          <button
+          <div
             key={s.id}
+            role="button"
+            tabIndex={0}
             onClick={() => handleSelectSession(s)}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-left mb-1 group transition-colors ${
+            onKeyDown={(e) => e.key === 'Enter' && handleSelectSession(s)}
+            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-left mb-1 group transition-colors cursor-pointer ${
               sessionId === s.id ? 'bg-sidebar-accent text-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
             }`}
           >
@@ -136,7 +139,7 @@ const Sidebar: React.FC = () => {
             >
               <Trash2 size={12} />
             </button>
-          </button>
+          </div>
         ))}
       </div>
 

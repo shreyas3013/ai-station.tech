@@ -1,9 +1,8 @@
-import React, { useState, Suspense, lazy, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
 import { Play, MessageSquare, Trash2 } from 'lucide-react';
 import { streamGroq } from '@/lib/streamGroq';
-
-const RailwayBackground = lazy(() => import('@/components/three/RailwayBackground'));
+import RailwayBackground from '@/components/three/RailwayBackground';
 
 const LANGUAGES = ['Python', 'JavaScript', 'TypeScript', 'Java', 'C', 'C++', 'HTML/CSS', 'Linux Terminal', 'SQL'];
 
@@ -51,7 +50,7 @@ const CodeStation: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-background relative">
-      <Suspense fallback={null}><RailwayBackground /></Suspense>
+      <RailwayBackground />
       <Sidebar />
       <div className="flex-1 flex flex-col relative z-10">
         <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-card/50 backdrop-blur-sm">
