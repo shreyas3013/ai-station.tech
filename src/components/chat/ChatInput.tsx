@@ -30,16 +30,26 @@ const ChatInput: React.FC = () => {
 
   const persistMessage = useCallback(async (msg: { session_id: string; role: string; content: string; model_used: string; model_label: string; is_image?: boolean; image_url?: string }) => {
     if (isTempMode) return;
-    await supabase.from('messages').insert(msg);
+    await supabase.from('messages').insert({
+      chat_id: msg.session_id,
+      role: msg.role,
+      content: msg.content,
+      model_used: msg.model_used,
+      routing_info: { label: msg.model_label },
+      is_image: msg.is_image || false,
+      image_url: msg.image_url || null,
+    });
   }, [isTempMode]);
 
   const ensureSession = useCallback(async (): Promise<string> => {
     if (sessionId) return sessionId;
     if (isTempMode || !user) return 'temp';
-    const id = uuidv4();
-    await supabase.from('chat_sessions').insert({ id, user_id: user.id, title: input.slice(0, 40) || 'New Chat' });
-    setSessionId(id);
-    return id;
+    const { data } = await supabase.from('chats').insert({ user_id: user.id, title: input.slice(0, 40) || 'New Chat' }).select('id').single();
+    if (data) {
+      setSessionId(data.id);
+      return data.id;
+    }
+    return 'temp';
   }, [sessionId, isTempMode, user, input, setSessionId]);
 
   const handleSend = useCallback(async () => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { MessageSquarePlus, Zap, LogOut, Code, ChevronLeft, ChevronRight, Trash2, Pin } from 'lucide-react';
+import { MessageSquarePlus, Zap, LogOut, Code, ChevronLeft, ChevronRight, Trash2, Star } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useChatStore } from '@/store/chatStore';
 import { supabase } from '@/lib/supabase';
@@ -9,7 +9,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 interface Session {
   id: string;
   title: string;
-  pinned: boolean;
+  starred: boolean;
   updated_at: string;
 }
 
@@ -24,10 +24,10 @@ const Sidebar: React.FC = () => {
   const fetchSessions = useCallback(async () => {
     if (!user) return;
     const { data } = await supabase
-      .from('chat_sessions')
-      .select('id, title, pinned, updated_at')
+      .from('chats')
+      .select('id, title, starred, updated_at')
       .eq('user_id', user.id)
-      .order('pinned', { ascending: false })
+      .order('starred', { ascending: false })
       .order('updated_at', { ascending: false })
       .limit(50);
     if (data) setSessions(data);
@@ -53,7 +53,7 @@ const Sidebar: React.FC = () => {
     const { data } = await supabase
       .from('messages')
       .select('*')
-      .eq('session_id', session.id)
+      .eq('chat_id', session.id)
       .order('created_at', { ascending: true });
     if (data) {
       useChatStore.setState({
@@ -62,7 +62,7 @@ const Sidebar: React.FC = () => {
           role: m.role,
           content: m.content,
           modelUsed: m.model_used || '',
-          modelLabel: m.model_label || '',
+          modelLabel: (m.routing_info as any)?.label || '',
           modelColor: '#666',
           isImage: m.is_image,
           imageUrl: m.image_url,
@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
 
   const handleDelete = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    await supabase.from('chat_sessions').delete().eq('id', id);
+    await supabase.from('chats').delete().eq('id', id);
     if (sessionId === id) clearMessages();
     fetchSessions();
   };
@@ -128,7 +128,7 @@ const Sidebar: React.FC = () => {
               sessionId === s.id ? 'bg-sidebar-accent text-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
             }`}
           >
-            {s.pinned && <Pin size={12} className="text-station-gold shrink-0" />}
+            {s.starred && <Star size={12} className="text-station-gold shrink-0" />}
             <span className="truncate flex-1">{s.title}</span>
             <button
               onClick={(e) => handleDelete(e, s.id)}

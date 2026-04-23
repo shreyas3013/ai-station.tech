@@ -14,9 +14,10 @@ const SharedChat: React.FC = () => {
     (async () => {
       if (!token) return;
       const { data: session } = await supabase
-        .from('chat_sessions')
+        .from('chats')
         .select('id, title')
         .eq('share_token', token)
+        .eq('is_shared', true)
         .single();
 
       if (!session) { setLoading(false); return; }
@@ -25,13 +26,13 @@ const SharedChat: React.FC = () => {
       const { data: msgs } = await supabase
         .from('messages')
         .select('*')
-        .eq('session_id', session.id)
+        .eq('chat_id', session.id)
         .order('created_at', { ascending: true });
 
       if (msgs) {
         setMessages(msgs.map((m: any) => ({
           id: m.id, role: m.role, content: m.content,
-          modelUsed: m.model_used || '', modelLabel: m.model_label || '',
+          modelUsed: m.model_used || '', modelLabel: (m.routing_info as any)?.label || '',
           modelColor: '#666', isImage: m.is_image, imageUrl: m.image_url,
           timestamp: new Date(m.created_at),
         })));
