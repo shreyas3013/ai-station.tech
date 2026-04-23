@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { Line } from '@react-three/drei';
 import * as THREE from 'three';
 
 function Particles() {
@@ -44,22 +45,22 @@ function Rails() {
     }
   });
 
-  const railGeometry = useMemo(() => {
-    const points = [];
+  const railPoints = useMemo(() => {
+    const points: [number, number, number][] = [];
     for (let i = 0; i < 50; i++) {
-      points.push(new THREE.Vector3(0, 0, i * 0.8 - 20));
+      points.push([0, 0, i * 0.8 - 20]);
     }
-    return new THREE.BufferGeometry().setFromPoints(points);
+    return points;
   }, []);
 
   return (
     <group ref={ref}>
-      <line geometry={railGeometry} position={[-0.6, -2, 0]}>
-        <lineBasicMaterial color="#7C3AED" opacity={0.3} transparent />
-      </line>
-      <line geometry={railGeometry} position={[0.6, -2, 0]}>
-        <lineBasicMaterial color="#7C3AED" opacity={0.3} transparent />
-      </line>
+      <group position={[-0.6, -2, 0]}>
+        <Line points={railPoints} color="#7C3AED" lineWidth={1} transparent opacity={0.3} />
+      </group>
+      <group position={[0.6, -2, 0]}>
+        <Line points={railPoints} color="#7C3AED" lineWidth={1} transparent opacity={0.3} />
+      </group>
       {Array.from({ length: 20 }).map((_, i) => (
         <mesh key={i} position={[0, -2.05, i * 2 - 20]} rotation={[0, 0, Math.PI / 2]}>
           <boxGeometry args={[0.05, 1.4, 0.1]} />
