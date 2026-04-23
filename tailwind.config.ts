@@ -13,6 +13,12 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        heading: ["Space Grotesk", "sans-serif"],
+        body: ["Inter", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
+        station: ["Rajdhani", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -47,6 +53,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        station: {
+          dark: "hsl(var(--station-dark))",
+          surface: "hsl(var(--station-surface))",
+          border: "hsl(var(--station-border))",
+          purple: "hsl(var(--station-purple))",
+          cyan: "hsl(var(--station-cyan))",
+          gold: "hsl(var(--station-gold))",
+          text: "hsl(var(--station-text))",
+          muted: "hsl(var(--station-muted))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -80,10 +96,31 @@ export default {
             height: "0",
           },
         },
+        "blink": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
+        "pulse-wave": {
+          "0%, 100%": { transform: "scaleY(0.4)" },
+          "50%": { transform: "scaleY(1)" },
+        },
+        "slide-up": {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "flip-down": {
+          "0%": { transform: "rotateX(0deg)" },
+          "50%": { transform: "rotateX(-90deg)" },
+          "100%": { transform: "rotateX(0deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "blink": "blink 1s step-end infinite",
+        "pulse-wave": "pulse-wave 1.2s ease-in-out infinite",
+        "slide-up": "slide-up 0.3s ease-out",
+        "flip-down": "flip-down 0.6s ease-in-out",
       },
     },
   },
