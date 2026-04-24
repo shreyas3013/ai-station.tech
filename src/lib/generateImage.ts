@@ -3,12 +3,14 @@ export async function generateImage(prompt: string): Promise<string> {
   const pollinationsUrl =
     `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&nologo=true&seed=${Date.now()}`;
 
-  try {
-    const test = await fetch(pollinationsUrl, { method: 'HEAD', signal: AbortSignal.timeout(5000) });
-    if (test.ok) return pollinationsUrl;
-  } catch { /* fall through */ }
+  // Pollinations serves images directly via URL. A HEAD pre-check is blocked
+  // by CORS in the browser, which previously caused us to fall through to
+  // Replicate (which also can't be called from the browser due to CORS).
+  // The <img> tag loads cross-origin images without CORS, so just return the URL.
+  return pollinationsUrl;
 
-  const replicateRes = await fetch(
+  // eslint-disable-next-line no-unreachable
+  const _replicateRes = await fetch(
     'https://api.replicate.com/v1/models/stability-ai/sdxl/predictions',
     {
       method: 'POST',
@@ -20,7 +22,7 @@ export async function generateImage(prompt: string): Promise<string> {
     }
   );
 
-  const { urls } = await replicateRes.json();
+  const { urls } = await _replicateRes.json();
   let result: any;
   let delay = 1000;
 
