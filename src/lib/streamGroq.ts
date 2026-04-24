@@ -4,23 +4,21 @@ export async function streamGroq(
   onDone: () => void,
   signal?: AbortSignal
 ): Promise<void> {
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  const res = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
+      'Authorization': `Bearer ${import.meta.env.VITE_LOVABLE_API_KEY ?? ''}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      model: 'google/gemini-2.5-flash',
       messages,
       stream: true,
-      max_tokens: 4096,
-      temperature: 0.7,
     }),
     signal,
   });
 
-  if (!res.ok) throw new Error(`Groq error: ${res.status}`);
+  if (!res.ok) throw new Error(`Gateway error: ${res.status}`);
 
   const reader = res.body!.getReader();
   const decoder = new TextDecoder();
