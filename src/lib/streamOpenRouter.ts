@@ -1,3 +1,15 @@
+import { streamFromGateway } from './streamGroq';
+
+// OpenRouter model IDs are mapped to equivalent Lovable AI Gateway models so the
+// existing router/manual-selection logic keeps working without exposing any API
+// keys from the browser.
+const MODEL_MAP: Record<string, string> = {
+  'deepseek/deepseek-r1:free': 'google/gemini-2.5-pro',
+  'meta-llama/llama-3.1-70b-instruct:free': 'google/gemini-2.5-flash',
+  'qwen/qwen-2.5-coder-32b-instruct:free': 'google/gemini-2.5-pro',
+  'microsoft/phi-4:free': 'google/gemini-2.5-flash-lite',
+};
+
 export async function streamOpenRouter(
   messages: { role: string; content: string }[],
   model: string,
@@ -5,43 +17,6 @@ export async function streamOpenRouter(
   onDone: () => void,
   signal?: AbortSignal
 ): Promise<void> {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': window.location.origin,
-      'X-Title': 'AI STATION',
-    },
-    body: JSON.stringify({
-      model,
-      messages,
-      stream: true,
-      max_tokens: 4096,
-      temperature: 0.7,
-    }),
-    signal,
-  });
-
-  if (!res.ok) throw new Error(`OpenRouter error: ${res.status}`);
-
-  const reader = res.body!.getReader();
-  const decoder = new TextDecoder();
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    const chunk = decoder.decode(value);
-    const lines = chunk.split('\n').filter(l => l.startsWith('data: '));
-    for (const line of lines) {
-      const data = line.replace('data: ', '');
-      if (data === '[DONE]') { onDone(); return; }
-      try {
-        const json = JSON.parse(data);
-        const token = json.choices?.[0]?.delta?.content ?? '';
-        if (token) onChunk(token);
-      } catch { /* ignore */ }
-    }
-  }
-  onDone();
+  const mapped = MODEL_MAP[model] || 'google/gemini-2.5-flash';
+  return streamFromGateway(mapped, messages, onChunk, onDone, signal);
 }

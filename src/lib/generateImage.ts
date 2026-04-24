@@ -1,40 +1,24 @@
+// Image generation via Lovable AI Gateway edge function (Nano Banana).
+// Falls back to Pollinations (URL-only, no API key) if the gateway fails.
 export async function generateImage(prompt: string): Promise<string> {
-  const encoded = encodeURIComponent(prompt);
-  const pollinationsUrl =
-    `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&nologo=true&seed=${Date.now()}`;
-
-  // Pollinations serves images directly via URL. A HEAD pre-check is blocked
-  // by CORS in the browser, which previously caused us to fall through to
-  // Replicate (which also can't be called from the browser due to CORS).
-  // The <img> tag loads cross-origin images without CORS, so just return the URL.
-  return pollinationsUrl;
-
-  // eslint-disable-next-line no-unreachable
-  const _replicateRes = await fetch(
-    'https://api.replicate.com/v1/models/stability-ai/sdxl/predictions',
-    {
+  try {
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-image`;
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_REPLICATE_API_KEY}`,
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ input: { prompt, num_inference_steps: 30 } })
-    }
-  );
-
-  const { urls } = await _replicateRes.json();
-  let result: any;
-  let delay = 1000;
-
-  while (!result || result.status !== 'succeeded') {
-    await new Promise(r => setTimeout(r, delay));
-    delay = Math.min(delay * 1.5, 5000);
-    const poll = await fetch(urls.get, {
-      headers: { 'Authorization': `Bearer ${import.meta.env.VITE_REPLICATE_API_KEY}` }
+      body: JSON.stringify({ prompt }),
     });
-    result = await poll.json();
-    if (result.status === 'failed') throw new Error('Image generation failed');
+    if (res.ok) {
+      const { url: imageUrl } = await res.json();
+      if (imageUrl) return imageUrl;
+    }
+  } catch {
+    /* fall through to Pollinations */
   }
 
-  return result.output[0];
+  const encoded = encodeURIComponent(prompt);
+  return `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&nologo=true&seed=${Date.now()}`;
 }

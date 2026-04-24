@@ -4,38 +4,52 @@ export async function streamGroq(
   onDone: () => void,
   signal?: AbortSignal
 ): Promise<void> {
-  const res = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+  return streamFromGateway('google/gemini-2.5-flash', messages, onChunk, onDone, signal);
+}
+
+export async function streamFromGateway(
+  model: string,
+  messages: { role: string; content: string }[],
+  onChunk: (token: string) => void,
+  onDone: () => void,
+  signal?: AbortSignal
+): Promise<void> {
+  const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${import.meta.env.VITE_LOVABLE_API_KEY ?? ''}`,
+      'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
-      messages,
-      stream: true,
-    }),
+    body: JSON.stringify({ model, messages }),
     signal,
   });
 
-  if (!res.ok) throw new Error(`Gateway error: ${res.status}`);
+  if (!res.ok || !res.body) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Gateway error ${res.status}: ${text.slice(0, 200)}`);
+  }
 
-  const reader = res.body!.getReader();
+  const reader = res.body.getReader();
   const decoder = new TextDecoder();
+  let buffer = '';
 
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    const chunk = decoder.decode(value);
-    const lines = chunk.split('\n').filter(l => l.startsWith('data: '));
-    for (const line of lines) {
-      const data = line.replace('data: ', '');
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line.startsWith('data:')) continue;
+      const data = line.slice(5).trim();
       if (data === '[DONE]') { onDone(); return; }
       try {
         const json = JSON.parse(data);
         const token = json.choices?.[0]?.delta?.content ?? '';
         if (token) onChunk(token);
-      } catch { /* ignore parse errors */ }
+      } catch { /* ignore */ }
     }
   }
   onDone();
