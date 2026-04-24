@@ -2,12 +2,15 @@
 // Falls back to Pollinations (URL-only, no API key) if the gateway fails.
 export async function generateImage(prompt: string): Promise<string> {
   try {
+    const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-image`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        'Authorization': `Bearer ${key}`,
+        apikey: key,
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify({ prompt }),
     });

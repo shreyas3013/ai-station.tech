@@ -63,6 +63,7 @@ export async function sendMessage(
       } catch { continue; }
     }
 
-    onError('All models failed. Please try again.');
+    const message = err instanceof Error ? err.message : 'Unknown model error';
+    onError(message.includes('aborted') ? 'Request cancelled.' : `All models failed. ${message}`);
   }
 }
