@@ -1,1 +1,7 @@
 project_id = "xlaxjeemizvyoaghtdzi"
+
+[functions.ai-chat]
+verify_jwt = false
+
+[functions.ai-image]
+verify_jwt = false
