@@ -10,6 +10,13 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (req.method === "GET") {
+    const ok = !!Deno.env.get("LOVABLE_API_KEY");
+    return new Response(JSON.stringify({ status: "ok", hasKey: ok, function: "ai-image" }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const { prompt } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
