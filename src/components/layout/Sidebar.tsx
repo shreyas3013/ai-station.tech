@@ -5,6 +5,7 @@ import { useChatStore } from '@/store/chatStore';
 import { supabase } from '@/lib/supabase';
 import { signOut } from '@/lib/auth';
 import { useNavigate, useLocation } from 'react-router-dom';
+import HealthCheck from './HealthCheck';
 
 interface Session {
   id: string;
@@ -96,6 +97,7 @@ const Sidebar: React.FC = () => {
         <button onClick={handleTempChat} className="p-2 text-station-gold hover:text-foreground"><Zap size={18} /></button>
         <button onClick={() => navigate('/code-station')} className="p-2 text-sidebar-foreground hover:text-foreground"><Code size={18} /></button>
         <div className="flex-1" />
+        <HealthCheck collapsed />
         <button onClick={handleSignOut} className="p-2 text-sidebar-foreground hover:text-destructive"><LogOut size={18} /></button>
       </div>
     );
@@ -153,6 +155,8 @@ const Sidebar: React.FC = () => {
           <Code size={16} /> Code Station
           <span className="ml-auto px-1.5 py-0.5 text-[10px] font-station rounded bg-station-gold/20 text-station-gold">BETA</span>
         </button>
+
+        <HealthCheck />
 
         <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
           <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
