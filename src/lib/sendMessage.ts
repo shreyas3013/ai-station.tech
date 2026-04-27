@@ -49,6 +49,18 @@ export async function sendMessage(
 
     await callModel(decision, fullMessages, onChunk, () => onDone(decision), signal);
   } catch (err) {
+    if (err instanceof Error && err.name === 'AbortError') {
+      onError('Request cancelled.');
+      return;
+    }
+
+    // If the user manually picked a model, do NOT silently swap to another one.
+    if (manualModel) {
+      const message = err instanceof Error ? err.message : 'Unknown model error';
+      onError(`${decision.label} failed: ${message}`);
+      return;
+    }
+
     const fallbacks: RouterDecision[] = [
       { modelId: 'groq', label: 'Groq LLaMA 3.3 70B', reason: 'Fallback', color: '#22C55E' },
       { modelId: 'openrouter-coding', openrouterModel: 'meta-llama/llama-3.1-70b-instruct:free', label: 'Llama 3.1 70B', reason: 'Fallback', color: '#F59E0B' },
