@@ -35,7 +35,8 @@ export async function streamGroq(
   onDone: () => void,
   signal?: AbortSignal
 ): Promise<void> {
-  return streamFromGateway('google/gemini-2.5-flash', messages, onChunk, onDone, signal);
+  // Groq slot -> fastest available gateway model
+  return streamFromGateway('google/gemini-2.5-flash-lite', messages, onChunk, onDone, signal);
 }
 
 export async function streamFromGateway(
