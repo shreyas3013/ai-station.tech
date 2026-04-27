@@ -94,14 +94,27 @@ export default MessageBubble;
 
 const ModelHeader: React.FC<{ label: string; color: string }> = ({ label, color }) => (
   <div
-    className="px-3 py-1.5 border-b flex items-center gap-2"
-    style={{ backgroundColor: `${color}1A`, borderColor: `${color}55` }}
+    className="px-3 py-1.5 border-b flex items-center gap-2 relative overflow-hidden"
+    style={{
+      background: `linear-gradient(90deg, ${color}26 0%, ${color}10 60%, transparent 100%)`,
+      borderColor: `${color}55`,
+    }}
   >
+    {/* Ticket-stub edge */}
+    <span
+      className="absolute left-0 top-0 bottom-0 w-1"
+      style={{ background: color, boxShadow: `0 0 8px ${color}` }}
+    />
     <Cpu size={12} style={{ color }} />
-    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: color }} />
+    <span
+      className="led-dot"
+      style={{ color }}
+    />
     <span className="text-[10px] font-station tracking-widest" style={{ color }}>
       {label || 'ROUTING…'}
     </span>
-    <span className="ml-auto text-[9px] font-station text-muted-foreground/60">PLATFORM 01</span>
+    <span className="ml-auto text-[9px] font-station text-muted-foreground/70 tracking-widest">
+      ✦ PLATFORM 01 · ARRIVED
+    </span>
   </div>
 );

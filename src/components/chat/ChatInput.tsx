@@ -181,10 +181,13 @@ const ChatInput: React.FC = () => {
   };
 
   return (
-    <div className="border-t border-border bg-card/50 backdrop-blur-sm p-4">
+    <div className="border-t border-station-border metal-panel p-4 relative">
+      {/* Rail ties strip above input — feels like the ticket counter */}
+      <div className="absolute top-0 left-0 right-0 h-1 rail-ties opacity-50 pointer-events-none" />
       {isTempMode && (
-        <div className="mb-2 px-3 py-1.5 rounded bg-station-gold/10 border border-station-gold/30 text-station-gold text-xs font-station">
-          TEMP MODE — THIS CONVERSATION WILL NOT BE SAVED
+        <div className="mb-2 px-3 py-1.5 rounded bg-station-gold/10 border border-station-gold/30 text-station-gold text-xs font-station flex items-center gap-2 station-glow">
+          <span className="led-dot text-station-gold" />
+          TEMP MODE — THIS JOURNEY IS NOT LOGGED
         </div>
       )}
       {suggestions.length > 0 && !isStreaming && (
