@@ -22,9 +22,19 @@ const MessageList: React.FC = () => {
 
   if (messages.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h1 className="text-4xl font-heading font-bold text-foreground mb-2">AI STATION</h1>
+      <div className="flex-1 flex flex-col items-center justify-center px-4 relative">
+        {/* Decorative rails */}
+        <div className="absolute left-0 right-0 top-1/3 h-px rail-track opacity-30" />
+        <div className="absolute left-0 right-0 bottom-1/4 h-px rail-track opacity-20" />
+        <div className="flex items-center gap-3 mb-2">
+          <span className="led-dot text-station-gold" />
+          <h1 className="text-4xl font-heading font-bold text-foreground tracking-tight">AI STATION</h1>
+          <span className="led-dot text-station-cyan" />
+        </div>
         <p className="text-muted-foreground font-station text-sm">UNIFIED AI PLATFORM — ALL MODELS, ONE INTERFACE</p>
+        <div className="mt-3 px-3 py-1 rounded border border-station-gold/40 bg-station-gold/5 flipboard text-[11px] text-station-gold">
+          NOW BOARDING — PLATFORM 01 — ASK ANYTHING
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-8 max-w-xl">
           {[
             { emoji: '💻', text: 'Write me a React component' },
@@ -33,10 +43,11 @@ const MessageList: React.FC = () => {
             { emoji: '🎨', text: 'Generate an image of a sunset' },
             { emoji: '📰', text: 'Latest news about technology' },
             { emoji: '❓', text: 'What is quantum computing?' },
-          ].map((s) => (
+          ].map((s, i) => (
             <button
               key={s.text}
-              className="p-3 rounded-lg bg-card border border-border hover:border-primary/50 text-left text-sm text-muted-foreground hover:text-foreground transition-colors"
+              style={{ animationDelay: `${i * 80}ms` }}
+              className="p-3 rounded-lg metal-panel hover-lift hover:border-station-cyan/50 text-left text-sm text-muted-foreground hover:text-foreground transition-colors animate-train-arrive"
             >
               <span className="text-lg">{s.emoji}</span>
               <p className="mt-1">{s.text}</p>
@@ -80,10 +91,13 @@ const MessageList: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border/50 bg-card/30 backdrop-blur-sm">
-        <span className="text-[10px] font-station text-muted-foreground tracking-widest">
-          ▎ TRACK 01 — {messages.length} MESSAGE{messages.length === 1 ? '' : 'S'}
-        </span>
+      <div className="flex items-center justify-between px-4 py-2 metal-panel border-b border-station-border">
+        <div className="flex items-center gap-2">
+          <span className="led-dot text-station-cyan" />
+          <span className="flipboard text-[11px] text-station-gold tracking-widest">
+            ▎ TRACK 01 · {messages.length.toString().padStart(2, '0')} MESSAGE{messages.length === 1 ? '' : 'S'} · ON SCHEDULE
+          </span>
+        </div>
         <div className="flex items-center gap-2">
           <button
             onClick={handleShare}
