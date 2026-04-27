@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { Loader2 } from 'lucide-react';
+import { Toaster } from 'sonner';
 
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const ChatPage = lazy(() => import('./pages/ChatPage'));
@@ -32,6 +33,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <Toaster position="top-right" theme="dark" richColors />
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
