@@ -113,6 +113,10 @@ export default {
           "50%": { transform: "rotateX(-90deg)" },
           "100%": { transform: "rotateX(0deg)" },
         },
+        "thinking-bounce": {
+          "0%, 80%, 100%": { transform: "translateY(0)", opacity: "0.4" },
+          "40%": { transform: "translateY(-4px)", opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -121,6 +125,7 @@ export default {
         "pulse-wave": "pulse-wave 1.2s ease-in-out infinite",
         "slide-up": "slide-up 0.3s ease-out",
         "flip-down": "flip-down 0.6s ease-in-out",
+        "thinking-bounce": "thinking-bounce 1.2s ease-in-out infinite",
       },
     },
   },
