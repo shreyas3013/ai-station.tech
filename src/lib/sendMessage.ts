@@ -20,7 +20,7 @@ async function callModel(
     case 'openrouter-phi':
       return streamOpenRouter(messages, decision.openrouterModel!, onChunk, onDone, signal);
     case 'gemini':
-      return streamGemini(messages, onChunk, onDone);
+      return streamGemini(messages, onChunk, onDone, signal);
   }
 }
 
