@@ -6,5 +6,5 @@ export async function streamGemini(
   onDone: () => void,
   signal?: AbortSignal
 ): Promise<void> {
-  return streamProvider('gemini', 'gemini-1.5-flash', messages, onChunk, onDone, signal);
+  return streamProvider('gemini', 'gemini-2.0-flash', messages, onChunk, onDone, signal);
 }

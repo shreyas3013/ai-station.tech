@@ -33,7 +33,7 @@ const PROVIDERS: Record<string, ProviderCfg> = {
     // Gemini exposes an OpenAI-compatible endpoint
     url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
     envKey: "GEMINI_API_KEY",
-    defaultModel: "gemini-1.5-flash",
+    defaultModel: "gemini-2.0-flash",
   },
 };
 
