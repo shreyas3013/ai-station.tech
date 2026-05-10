@@ -39,13 +39,13 @@ const Sidebar: React.FC = () => {
   const handleNewChat = () => {
     clearMessages();
     setTempMode(false);
-    navigate('/');
+    navigate('/chat');
   };
 
   const handleTempChat = () => {
     clearMessages();
     setTempMode(true);
-    navigate('/');
+    navigate('/chat');
   };
 
   const handleSelectSession = async (session: Session) => {
@@ -71,7 +71,7 @@ const Sidebar: React.FC = () => {
         })),
       });
     }
-    navigate('/');
+    navigate('/chat');
   };
 
   const handleDelete = async (e: React.MouseEvent, id: string) => {
