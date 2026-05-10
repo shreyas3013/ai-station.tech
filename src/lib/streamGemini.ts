@@ -1,10 +1,9 @@
-import { streamProvider } from './streamGroq';
+import { streamFromGateway } from './streamGroq';
 
 export async function streamGemini(
   messages: { role: string; content: string }[],
   onChunk: (token: string) => void,
-  onDone: () => void,
-  signal?: AbortSignal
+  onDone: () => void
 ): Promise<void> {
-  return streamProvider('gemini', 'gemini-2.0-flash', messages, onChunk, onDone, signal);
+  return streamFromGateway('google/gemini-2.5-flash', messages, onChunk, onDone);
 }

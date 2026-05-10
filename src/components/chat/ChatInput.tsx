@@ -181,21 +181,20 @@ const ChatInput: React.FC = () => {
   };
 
   return (
-    <div className="border-t border-border bg-card/30 p-4 relative">
+    <div className="border-t border-border bg-card/50 backdrop-blur-sm p-4">
       {isTempMode && (
-        <div className="mb-2 px-3 py-1.5 rounded bg-accent/40 border border-border text-accent-foreground text-xs flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Temp mode — this chat is not saved
+        <div className="mb-2 px-3 py-1.5 rounded bg-station-gold/10 border border-station-gold/30 text-station-gold text-xs font-station">
+          TEMP MODE — THIS CONVERSATION WILL NOT BE SAVED
         </div>
       )}
       {suggestions.length > 0 && !isStreaming && (
         <div className="max-w-4xl mx-auto mb-2 flex flex-wrap gap-2">
-          <span className="text-[10px] uppercase tracking-wide text-muted-foreground self-center">Suggestions →</span>
+          <span className="text-[10px] font-station text-muted-foreground self-center">SUGGESTIONS →</span>
           {suggestions.map((s, i) => (
             <button
               key={i}
               onClick={() => { setInput(s); setSuggestions([]); }}
-              className="text-xs px-2.5 py-1 rounded-full border border-border bg-background text-foreground/80 hover:bg-accent hover:text-foreground transition-colors truncate max-w-xs"
+              className="text-xs px-2.5 py-1 rounded-full border border-station-cyan/30 bg-station-cyan/5 text-station-cyan hover:bg-station-cyan/15 transition-colors truncate max-w-xs"
               title={s}
             >
               {s}
@@ -228,7 +227,7 @@ const ChatInput: React.FC = () => {
           onClick={handleEnhance}
           disabled={!input.trim() || enhancing || isStreaming}
           title="Enhance prompt"
-          className="p-3 rounded-lg border border-border bg-card text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="p-3 rounded-lg border border-station-gold/40 bg-station-gold/10 text-station-gold hover:bg-station-gold/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {enhancing ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
         </button>

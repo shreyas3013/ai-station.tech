@@ -23,22 +23,23 @@ const MessageList: React.FC = () => {
   if (messages.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h1 className="text-4xl font-heading font-bold text-foreground tracking-tight mb-2">AI Station</h1>
-        <p className="text-muted-foreground text-sm">Unified AI platform — all models, one interface</p>
+        <h1 className="text-4xl font-heading font-bold text-foreground mb-2">AI STATION</h1>
+        <p className="text-muted-foreground font-station text-sm">UNIFIED AI PLATFORM — ALL MODELS, ONE INTERFACE</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-8 max-w-xl">
           {[
-            'Write me a React component',
-            'Analyze the pros and cons',
-            'Write a blog article about AI',
-            'Generate an image of a sunset',
-            'Latest news about technology',
-            'What is quantum computing?',
+            { emoji: '💻', text: 'Write me a React component' },
+            { emoji: '🧠', text: 'Analyze the pros and cons' },
+            { emoji: '✍️', text: 'Write a blog article about AI' },
+            { emoji: '🎨', text: 'Generate an image of a sunset' },
+            { emoji: '📰', text: 'Latest news about technology' },
+            { emoji: '❓', text: 'What is quantum computing?' },
           ].map((s) => (
             <button
-              key={s}
-              className="p-3 rounded-lg border border-border bg-card hover:border-primary/50 text-left text-sm text-muted-foreground hover:text-foreground transition-colors"
+              key={s.text}
+              className="p-3 rounded-lg bg-card border border-border hover:border-primary/50 text-left text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              {s}
+              <span className="text-lg">{s.emoji}</span>
+              <p className="mt-1">{s.text}</p>
             </button>
           ))}
         </div>
@@ -79,25 +80,25 @@ const MessageList: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/30">
-        <span className="text-xs text-muted-foreground">
-          {messages.length} message{messages.length === 1 ? '' : 's'}
+      <div className="flex items-center justify-between px-4 py-2 border-b border-border/50 bg-card/30 backdrop-blur-sm">
+        <span className="text-[10px] font-station text-muted-foreground tracking-widest">
+          ▎ TRACK 01 — {messages.length} MESSAGE{messages.length === 1 ? '' : 'S'}
         </span>
         <div className="flex items-center gap-2">
           <button
             onClick={handleShare}
             disabled={sharing || isTempMode || !sessionId}
             title={isTempMode ? 'Disabled in Temp mode' : 'Share chat link'}
-            className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border border-border text-muted-foreground hover:text-foreground hover:border-primary/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1.5 text-[10px] font-station px-2.5 py-1 rounded border border-station-cyan/30 text-station-cyan hover:bg-station-cyan/10 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {sharing ? <Loader2 size={12} className="animate-spin" /> : shared ? <Check size={12} /> : <Share2 size={12} />}
-            {shared ? 'Copied' : 'Share'}
+            {shared ? 'COPIED' : 'SHARE'}
           </button>
           <button
             onClick={handleExport}
             disabled={exporting}
             title="Export as .docx"
-            className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border border-border text-muted-foreground hover:text-foreground hover:border-primary/50 disabled:opacity-40 transition-colors"
+            className="flex items-center gap-1.5 text-[10px] font-station px-2.5 py-1 rounded border border-station-gold/30 text-station-gold hover:bg-station-gold/10 disabled:opacity-40"
           >
             {exporting ? <Loader2 size={12} className="animate-spin" /> : <FileDown size={12} />}
             DOCX
