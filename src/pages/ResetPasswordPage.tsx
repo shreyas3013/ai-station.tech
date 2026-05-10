@@ -16,7 +16,7 @@ const ResetPasswordPage: React.FC = () => {
       setMessage(error.message);
     } else {
       setMessage('Password updated! Redirecting...');
-      setTimeout(() => navigate('/'), 2000);
+      setTimeout(() => navigate('/chat'), 2000);
     }
     setLoading(false);
   };

@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
       if (mode === 'signin') {
         const { error } = await signIn(email, password);
         if (error) throw error;
-        navigate('/');
+        navigate('/chat');
       } else if (mode === 'signup') {
         const { error } = await signUp(email, password);
         if (error) throw error;

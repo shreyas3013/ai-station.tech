@@ -54,6 +54,28 @@
     --station-gold: 38 92% 50%;
     --station-text: 214 32% 91%;
     --station-muted: 215 20% 65%;
+
+    /* Landing page tokens (raw values, not HSL pipeline) */
+    --c-void: #04040E;
+    --c-deep: #07071A;
+    --c-surface: #0C0C22;
+    --c-raised: #11112C;
+    --c-glass: rgba(11,11,30,0.72);
+    --c-signal: #3D82C4;
+    --c-signal-2: #4A90D9;
+    --c-signal-3: rgba(74,144,217,0.4);
+    --c-signal-4: rgba(74,144,217,0.12);
+    --c-signal-5: rgba(74,144,217,0.06);
+    --c-gold: #D4920A;
+    --c-gold-2: #F59E0B;
+    --c-gold-3: rgba(245,158,11,0.3);
+    --c-gold-4: rgba(245,158,11,0.08);
+    --c-text: #E8EDF6;
+    --c-text-2: #9AAABB;
+    --c-text-3: #4A5A6A;
+    --c-border: rgba(74,144,217,0.16);
+    --c-border-2: rgba(255,255,255,0.06);
+    --c-separator: rgba(74,144,217,0.1);
   }
 }
 
@@ -107,3 +129,13 @@
   0% { opacity: 0.2; }
   100% { opacity: 0.5; }
 }
+
+@layer utilities {
+  .font-syne { font-family: 'Syne', sans-serif; }
+  .font-outfit { font-family: 'Outfit', sans-serif; }
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
