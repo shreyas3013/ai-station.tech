@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mic, Wand2, Link2, Ghost, Terminal, History } from 'lucide-react';
+import { Mic, Wand2, Link2, Ghost, Terminal, History, type LucideIcon } from 'lucide-react';
 
 const cardBase = {
   background: 'var(--c-glass)',
@@ -37,7 +37,7 @@ const CodePreview = () => (
 );
 
 type Card = {
-  icon: React.ComponentType<{ size?: number; color?: string }>;
+  icon: LucideIcon;
   title: string;
   desc: string;
   badge?: string;
