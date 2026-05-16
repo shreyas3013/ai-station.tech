@@ -33,6 +33,25 @@ const MessageBubble: React.FC<MessageBubbleProps> = React.memo(({ message, isStr
     }
   }, [message.content]);
 
+  const handleDownloadImage = useCallback(async () => {
+    if (!message.imageUrl) return;
+    try {
+      const res = await fetch(message.imageUrl, { mode: 'cors' });
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ai-station-${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      // fallback: open in new tab
+      window.open(message.imageUrl, '_blank');
+    }
+  }, [message.imageUrl]);
+
   if (message.isImage && message.imageUrl) {
     return (
       <div className="flex justify-start mb-4 animate-slide-up">
@@ -41,9 +60,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = React.memo(({ message, isStr
           <div className="mt-2 rounded-lg overflow-hidden border border-border">
             <img src={message.imageUrl} alt="Generated" className="w-full" loading="lazy" />
           </div>
-          <a href={message.imageUrl} download className="inline-flex items-center gap-1 mt-2 text-xs text-muted-foreground hover:text-foreground">
+          <button
+            onClick={handleDownloadImage}
+            className="inline-flex items-center gap-1 mt-2 text-xs text-muted-foreground hover:text-foreground"
+          >
             <Download size={12} /> Download
-          </a>
+          </button>
         </div>
       </div>
     );

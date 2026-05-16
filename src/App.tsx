@@ -9,7 +9,6 @@ const ChatPage = lazy(() => import('./pages/ChatPage'));
 const CodeStation = lazy(() => import('./pages/CodeStation'));
 const SharedChat = lazy(() => import('./pages/SharedChat'));
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
-const Landing = lazy(() => import('./pages/Landing'));
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuthStore();
@@ -22,6 +21,16 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function RootRedirect() {
+  const { user, loading } = useAuthStore();
+  if (loading) return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <Loader2 className="animate-spin text-primary" size={32} />
+    </div>
+  );
+  return <Navigate to={user ? '/chat' : '/login'} replace />;
+}
+
 const Loading = () => (
   <div className="min-h-screen bg-background flex items-center justify-center">
     <Loader2 className="animate-spin text-primary" size={32} />
@@ -32,33 +41,12 @@ const App = () => {
   const initialize = useAuthStore((s) => s.initialize);
   useEffect(() => { initialize(); }, [initialize]);
 
-  useEffect(() => {
-    let lenis: any;
-    let rafId: number;
-    (async () => {
-      const Lenis = (await import('@studio-freight/lenis')).default;
-      lenis = new Lenis({
-        duration: 1.35,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
-      const raf = (time: number) => {
-        lenis.raf(time);
-        rafId = requestAnimationFrame(raf);
-      };
-      rafId = requestAnimationFrame(raf);
-    })();
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      if (lenis) lenis.destroy();
-    };
-  }, []);
-
   return (
     <BrowserRouter>
       <Toaster position="top-right" theme="dark" richColors />
       <Suspense fallback={<Loading />}>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<RootRedirect />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth" element={<LoginPage />} />
           <Route path="/share/:token" element={<SharedChat />} />
