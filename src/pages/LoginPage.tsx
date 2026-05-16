@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { signIn, signUp, signInWithMagicLink, resetPassword } from '@/lib/auth';
 import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 type Mode = 'signin' | 'signup' | 'forgot';
 
@@ -10,6 +10,7 @@ const LoginPage: React.FC = () => {
   const [mode, setMode] = useState<Mode>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -95,11 +96,23 @@ const LoginPage: React.FC = () => {
               {mode !== 'forgot' && (
                 <div>
                   <label className="text-xs font-station text-muted-foreground">PASSWORD</label>
-                  <input
-                    type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                    required minLength={6}
-                    className="w-full mt-1 px-3 py-2.5 rounded-lg border border-border bg-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
+                  <div className="relative mt-1">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required minLength={6}
+                      className="w-full px-3 py-2.5 pr-10 rounded-lg border border-border bg-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
               )}
 
