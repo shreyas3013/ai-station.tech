@@ -21,6 +21,16 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function RootRedirect() {
+  const { user, loading } = useAuthStore();
+  if (loading) return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <Loader2 className="animate-spin text-primary" size={32} />
+    </div>
+  );
+  return <Navigate to={user ? '/chat' : '/login'} replace />;
+}
+
 const Loading = () => (
   <div className="min-h-screen bg-background flex items-center justify-center">
     <Loader2 className="animate-spin text-primary" size={32} />
