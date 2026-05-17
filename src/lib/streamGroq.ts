@@ -1,22 +1,24 @@
-// Generic OpenAI-compatible SSE streaming helper + direct Groq call.
-export async function streamOpenAICompat(
-  endpoint: string,
-  apiKey: string,
+// Streams chat completions through the ai-chat Supabase Edge Function.
+// API keys live server-side; the browser never sees them.
+const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+const ANON = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+export async function streamViaEdge(
+  provider: 'groq' | 'gemini' | 'openrouter',
   model: string,
   messages: { role: string; content: string }[],
   onChunk: (token: string) => void,
   onDone: () => void,
-  signal?: AbortSignal,
-  extraHeaders: Record<string, string> = {}
+  signal?: AbortSignal
 ): Promise<void> {
-  const res = await fetch(endpoint, {
+  const res = await fetch(FN_URL, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${ANON}`,
+      apikey: ANON,
       'Content-Type': 'application/json',
-      ...extraHeaders,
     },
-    body: JSON.stringify({ model, messages, stream: true }),
+    body: JSON.stringify({ provider, model, messages }),
     signal,
   });
 
@@ -30,7 +32,7 @@ export async function streamOpenAICompat(
   const decoder = new TextDecoder();
   let buffer = '';
 
-  const handleLine = (raw: string) => {
+  const handleLine = (raw: string): boolean => {
     const line = raw.trim();
     if (!line.startsWith('data:')) return false;
     const data = line.slice(5).trim();
@@ -49,9 +51,7 @@ export async function streamOpenAICompat(
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split('\n');
     buffer = lines.pop() || '';
-    for (const l of lines) {
-      if (handleLine(l)) return;
-    }
+    for (const l of lines) if (handleLine(l)) return;
   }
   if (buffer && handleLine(buffer)) return;
   onDone();
@@ -63,12 +63,5 @@ export async function streamGroq(
   onDone: () => void,
   signal?: AbortSignal
 ): Promise<void> {
-  const key = import.meta.env.VITE_GROQ_API_KEY;
-  if (!key) throw new Error('VITE_GROQ_API_KEY missing');
-  return streamOpenAICompat(
-    'https://api.groq.com/openai/v1/chat/completions',
-    key,
-    'llama-3.3-70b-versatile',
-    messages, onChunk, onDone, signal
-  );
+  return streamViaEdge('groq', 'llama-3.3-70b-versatile', messages, onChunk, onDone, signal);
 }
