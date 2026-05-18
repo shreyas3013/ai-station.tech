@@ -3,11 +3,11 @@ import { useChatStore } from '@/store/chatStore';
 import { X } from 'lucide-react';
 
 const MODELS = [
-  { id: 'gemini', label: 'Gemini 1.5 Flash', desc: 'Writing / Creative', color: '#3B82F6', emoji: '✨' },
+  { id: 'gemini', label: 'Gemini 2.0 Flash', desc: 'Writing / Creative', color: '#3B82F6', emoji: '✨' },
   { id: 'groq', label: 'Groq LLaMA 3.3', desc: 'Fast / News', color: '#22C55E', emoji: '⚡' },
-  { id: 'openrouter-coding', label: 'Llama 3.1 70B', desc: 'Coding', color: '#F59E0B', emoji: '💻' },
+  { id: 'openrouter-coding', label: 'Llama 3.3 70B', desc: 'Coding', color: '#F59E0B', emoji: '💻' },
   { id: 'openrouter-coder-pro', label: 'Qwen 2.5 Coder', desc: 'Advanced Code', color: '#F97316', emoji: '🔧' },
-  { id: 'openrouter-reasoning', label: 'DeepSeek R1', desc: 'Reasoning', color: '#8B5CF6', emoji: '🧠' },
+  { id: 'openrouter-reasoning', label: 'DeepSeek V4 Flash', desc: 'Reasoning', color: '#8B5CF6', emoji: '🧠' },
   { id: 'openrouter-phi', label: 'Phi-4', desc: 'Quick Facts', color: '#10B981', emoji: '❓' },
   { id: 'pollinations', label: 'Pollinations AI', desc: 'Images', color: '#EC4899', emoji: '🎨' },
 ];
