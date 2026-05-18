@@ -39,7 +39,8 @@ export async function streamViaEdge(
     if (data === '[DONE]') { onDone(); return true; }
     try {
       const json = JSON.parse(data);
-      const token = json.choices?.[0]?.delta?.content ?? '';
+      const delta = json.choices?.[0]?.delta ?? {};
+      const token = delta.content || delta.reasoning || '';
       if (token) onChunk(token);
     } catch { /* ignore */ }
     return false;
