@@ -63,8 +63,8 @@ export async function sendMessage(
 
     const fallbacks: RouterDecision[] = [
       { modelId: 'groq', label: 'Groq LLaMA 3.3 70B', reason: 'Fallback', color: '#22C55E' },
-      { modelId: 'openrouter-coding', openrouterModel: 'meta-llama/llama-3.1-70b-instruct:free', label: 'Llama 3.1 70B', reason: 'Fallback', color: '#F59E0B' },
-      { modelId: 'gemini', label: 'Gemini 1.5 Flash', reason: 'Fallback', color: '#3B82F6' },
+      { modelId: 'openrouter-coding', openrouterModel: 'meta-llama/llama-3.3-70b-instruct:free', label: 'Llama 3.3 70B', reason: 'Fallback', color: '#F59E0B' },
+      { modelId: 'gemini', label: 'Gemini 2.0 Flash', reason: 'Fallback', color: '#3B82F6' },
     ];
 
     for (const fallback of fallbacks) {
