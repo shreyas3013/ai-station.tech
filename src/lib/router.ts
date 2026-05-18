@@ -87,7 +87,7 @@ export function routePrompt(prompt: string): RouterDecision {
 
   if (codeScore >= 1) return {
     modelId: 'openrouter-coding',
-    openrouterModel: 'meta-llama/llama-3.3-70b-instruct:free',
+    openrouterModel: 'meta-llama/llama-3.3-70b-instruct',
     label: 'Llama 3.3 70B (Code)',
     reason: 'Coding task — Llama 3.3 70B via OpenRouter', color: '#F59E0B'
   };
@@ -126,7 +126,7 @@ export function buildManualDecision(modelId: string): RouterDecision {
   const map: Record<string, RouterDecision> = {
     gemini: { modelId: 'gemini', label: 'Gemini 2.0 Flash', reason: 'Manual selection', color: '#3B82F6' },
     groq: { modelId: 'groq', label: 'Groq LLaMA 3.3 70B', reason: 'Manual selection', color: '#22C55E' },
-    'openrouter-coding': { modelId: 'openrouter-coding', openrouterModel: 'meta-llama/llama-3.3-70b-instruct:free', label: 'Llama 3.3 70B (Code)', reason: 'Manual selection', color: '#F59E0B' },
+    'openrouter-coding': { modelId: 'openrouter-coding', openrouterModel: 'meta-llama/llama-3.3-70b-instruct', label: 'Llama 3.3 70B (Code)', reason: 'Manual selection', color: '#F59E0B' },
     'openrouter-coder-pro': { modelId: 'openrouter-coder-pro', openrouterModel: 'qwen/qwen-2.5-coder-32b-instruct', label: 'Qwen 2.5 Coder 32B', reason: 'Manual selection', color: '#F97316' },
     'openrouter-reasoning': { modelId: 'openrouter-reasoning', openrouterModel: 'deepseek/deepseek-v4-flash:free', label: 'DeepSeek V4 Flash (Reasoning)', reason: 'Manual selection', color: '#8B5CF6' },
     'openrouter-phi': { modelId: 'openrouter-phi', openrouterModel: 'microsoft/phi-4', label: 'Phi-4 (Quick)', reason: 'Manual selection', color: '#10B981' },
