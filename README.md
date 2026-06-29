@@ -66,13 +66,7 @@ graph TD
     ReactApp --> PostgreSQL
 ```
 
-## Screenshots
 
-Add:
-- Landing Page Screenshot
-- Chat Interface Screenshot
-- Code Station Screenshot
-- Mobile View Screenshot
 
 ## Installation
 
